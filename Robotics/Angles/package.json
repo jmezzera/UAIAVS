@@ -1,0 +1,25 @@
+{
+  "name": "angles",
+  "version": "1.0.0",
+  "description": "Expone una API REST para el manejo de varios servos",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "www.github.com/jmezzera/Tesis"
+  },
+  "keywords": [
+    "Servo",
+    "Tesis",
+    "Angles"
+  ],
+  "author": "Juan Andrés Mezzera",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "pigpio": "^1.2.3"
+  }
+}
