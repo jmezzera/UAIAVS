@@ -1,0 +1,10 @@
+const dt = 100;
+const Dt = 200;
+const PULLEY_RADIUS = 5;
+const FIELD_LENGTH = 200;
+const FIELD_WIDTH = 150;
+const FIELD_HEIGHT = 100;
+const STEPS_PER_REV = 400;
+
+
+export {Dt, dt, PULLEY_RADIUS, FIELD_LENGTH, FIELD_WIDTH, FIELD_HEIGHT, STEPS_PER_REV};
