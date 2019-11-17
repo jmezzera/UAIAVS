@@ -70,6 +70,24 @@
   margin-left: 2.3%;
 }
 
+.rec {
+  position: absolute;
+  width: 64%;
+  height: 60%;
+  margin: -1% 20%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: 1000;
+}
+
+.cameraRec {
+  background-image: url("./Assets/Images/rec.png");
+}
+
+.cameraRec2 {
+  background-image: url("./Assets/Images/rec2.png");
+}
+
 .switchDiv {
   width: 70%;
   margin: auto;

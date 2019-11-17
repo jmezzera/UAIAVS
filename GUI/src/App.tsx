@@ -35,6 +35,7 @@ type AppState = {
   angles: { theta: number, phi: number },
   showingArchive: boolean,
   recording: boolean,
+  showRec: boolean
 }
 
 const sequences = [Sequence.Round, Sequence.Middle_Length, Sequence.Middle_Width, Sequence.DIAGONAL];
@@ -44,6 +45,7 @@ class App extends Component<{}, AppState> {
   private movement: Movement;
   private anglesController: IAngles;
   private recordingController: IRecording;
+  private interval: any;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -54,7 +56,8 @@ class App extends Component<{}, AppState> {
         theta: 0, phi: 0
       },
       showingArchive: false,
-      recording: false
+      recording: false,
+      showRec: true
     }
     this.positionReceived = this.positionReceived.bind(this);
     this.startRecording = this.startRecording.bind(this);
@@ -74,17 +77,23 @@ class App extends Component<{}, AppState> {
   angleReceived(angles: { theta: number, phi: number }) {
     this.setState({ angles });
   }
-  startRecording(): void{
-    if (!this.state.recording){
+  startRecording(): void {
+    if (!this.state.recording) {
       this.recordingController.startRecording();
+      this.hideRec();
       this.setState({recording: true})
     }
   }
-  stopRecording(): void{
-    if (this.state.recording){ 
+  stopRecording(): void {
+    if (this.state.recording) { 
       this.recordingController.stopRecording();
       this.setState({recording: false})
     }
+  }
+  hideRec(): void {
+    this.interval = setInterval(() => {
+      this.setState({showRec: this.state.showRec === true && this.state.recording ? false : true});
+    }, 1000)
   }
 
   renderMainView(): ReactNode {
@@ -109,6 +118,8 @@ class App extends Component<{}, AppState> {
             <RecordingButton recording={this.state.recording} onClick={this.startRecording}></RecordingButton>
             <StopButton visible={this.state.recording} onClick={this.stopRecording}></StopButton>
           </div>
+          <div className="rec cameraRec2" hidden={!this.state.recording}></div>
+          <div className="rec cameraRec" hidden={this.state.showRec}></div>
           <VideoPlayer></VideoPlayer>
           <Buttons setPoints={setPoints} sequences={sequences} movement={this.movement}></Buttons>
         </div>
