@@ -91,28 +91,30 @@ class App extends Component<{}, AppState> {
     return (
       <>
         <div className="leftColumn">
-          <div className="switch-div">
+          <div className="switchDiv">
             <MySwitch></MySwitch>
-            <div className="operation-mode-labels">
+            <div className="operationModeLabels">
               <div className="manual"><strong> Manual </strong></div>
               <div className="automatic"><strong> Automático </strong></div>
             </div>
-            <RecordingButton recording={this.state.recording} onClick={this.startRecording}></RecordingButton>
-            <StopButton visible={this.state.recording} onClick={this.stopRecording}></StopButton>
           </div>
-          <div className="position-labels label">
+          <div className="positionLabels label">
             <div><strong> x: </strong>{this.state.position.x.toFixed(1)}</div>
             <div><strong> y: </strong>{this.state.position.y.toFixed(1)}</div>
             <div><strong> z: </strong>{this.state.position.z.toFixed(1)}</div>
           </div>
         </div>
         <div className="centerColumn">
+          <div className="recordDiv">
+            <RecordingButton recording={this.state.recording} onClick={this.startRecording}></RecordingButton>
+            <StopButton visible={this.state.recording} onClick={this.stopRecording}></StopButton>
+          </div>
           <VideoPlayer></VideoPlayer>
           <Buttons setPoints={setPoints} sequences={sequences} movement={this.movement}></Buttons>
         </div>
         <div className="rightColumn">
           <Canvas position={this.state.position}></Canvas>
-          <div className="angle-labels label">
+          <div className="angleLabels label">
             <div><strong> {String.fromCharCode(920)}: </strong>{this.state.position.x.toFixed(1)}</div>
             <div><strong> {String.fromCharCode(934)}: </strong>{this.state.position.y.toFixed(1)}</div>
           </div>

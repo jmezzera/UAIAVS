@@ -47,11 +47,11 @@
   text-align: center;
 }
 
-.position-labels div {
+.positionLabels div {
   width: 33.3%;
 }
 
-.angle-labels div {
+.angleLabels div {
   width: 50%;
 }
 
@@ -60,13 +60,23 @@
   color: white;
 }
 */
-
-.switch-div {
-  width: 70%;
+.recordDiv {
+  width: 100%;
   margin: auto;
+  margin-top: 2%;
 }
 
-.operation-mode-labels {
+.recordDiv i {
+  margin-left: 2.3%;
+}
+
+.switchDiv {
+  width: 70%;
+  margin: auto;
+  margin-top: -5%;
+}
+
+.operationModeLabels {
   position: relative;
   width: 100%;
   margin: auto;
@@ -74,18 +84,18 @@
   display: block;
 }
 
-.operation-mode-labels div {
+.operationModeLabels div {
   position: relative;
   width: 50%;
   display: block;
   float: left;
 }
 
-.operation-mode-labels .manual {
+.operationModeLabels .manual {
   text-align: left;
 }
 
-.operation-mode-labels .automatic {
+.operationModeLabels .automatic {
   text-align: right;
 }
 

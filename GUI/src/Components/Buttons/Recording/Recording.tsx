@@ -24,7 +24,7 @@ export default class RecordingButton extends Component<RecordingButtonProps, Rec
     }
     render() {
         return (
-            <i className="fas fa-circle fa-2x" 
+            <i className="far fa-dot-circle fa-2x"
                 style={{color: this.props.recording ? this.state.color : 'red'}}
                 onClick={this.props.onClick}
             ></i>
