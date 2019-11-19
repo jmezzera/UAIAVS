@@ -103,7 +103,7 @@ class Positioning {
         point.y = point.y === -10 ? this.position.y : point.y
         point.z = point.z === -10 ? this.position.z : point.z
         //Ensure point lays inside the field
-        point.constrain([20, FIELD_LENGTH -20], [20, FIELD_WIDTH - 20], [0, FIELD_HEIGHT]);
+        point.constrain([40, FIELD_LENGTH -40], [40, FIELD_WIDTH - 40], [0, FIELD_HEIGHT]);
 
         const initial = this.position;
         const pathGenerator = (T: number): Point => {

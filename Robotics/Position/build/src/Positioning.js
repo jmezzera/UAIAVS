@@ -126,7 +126,7 @@ var Positioning = /** @class */ (function () {
         point.y = point.y === -10 ? this.position.y : point.y;
         point.z = point.z === -10 ? this.position.z : point.z;
         //Ensure point lays inside the field
-        point.constrain([20, constants_1.FIELD_LENGTH - 20], [20, constants_1.FIELD_WIDTH - 20], [0, constants_1.FIELD_HEIGHT]);
+        point.constrain([40, constants_1.FIELD_LENGTH - 40], [40, constants_1.FIELD_WIDTH - 40], [0, constants_1.FIELD_HEIGHT]);
         var initial = this.position;
         var pathGenerator = function (T) {
             return new Space_1.Point(initial.x + T * (point.x - initial.x), initial.y + T * (point.y - initial.y), initial.z + T * (point.z - initial.z));
