@@ -3,7 +3,7 @@ import cv2
 import threading
 
 
-SOURCE = 'udp://192.168.1.109:10001'
+SOURCE = 'udp://127.0.0.1:10001'
 OUTPUT_NAME = 'output_video.mp4'
 
 def record_video(record):

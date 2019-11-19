@@ -15,7 +15,7 @@ class camera:
                 # self.gopro.gpControlSet(constants.Stream.BIT_RATE, constants.Stream.BitRate.B600Kbps)
                 #self.source = "udp://@10.5.5.9:8554"
                 self.options = " -codec:v mpeg2video -s 640x360 -an "
-                self.source = "udp://@192.168.1.109:10001"
+                self.source = "udp://192.168.1.147:10000"
                 self.ffmpeg_command_GUI = " -f mpegts -codec:v mpeg1video -s 640x480 -b:v 400k -bf 0 -an "
                 #self.ffmpeg_command_GUI = " -f mp4 -codec:v libx264 -s 640x480 -b:v 400k -bf 0 -an "
 
@@ -27,8 +27,8 @@ class camera:
 
         def keep_alive(self):
                 #print("keep alive")
-                #self.gopro.stream(self.options+self.source+self.ffmpeg_command_GUI+self.GUI_target)
-                self.gopro.stream(self.options+self.source)
+                self.gopro.stream(self.options+self.source+self.ffmpeg_command_GUI+self.GUI_target)
+                #self.gopro.stream(self.options+self.source)
 
 
         def get_source(self):
