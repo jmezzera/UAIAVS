@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Motors_1 = require("./Motors");
+// import Motors from './MotorsDummy'
 var Space_1 = require("./Space");
 var Sequences_1 = require("./Sequences");
 var constants_1 = require("./constants");
@@ -60,15 +61,44 @@ var Positioning = /** @class */ (function () {
     }
     Positioning.prototype.moveDir = function (dir, speed) {
         var _this = this;
+        console.log("point: ", dir.x, dir.y, dir.z);
         if (!speed)
             speed = 10;
         if (dir.equals(new Space_1.Point(0, 0, 0))) {
-            this.scheduled = function () { return _this.motorsDriver.moveAngle([0, 0, 0, 0], constants_1.Dt); };
-            return 201;
+            console.log("IF ZERO MOVE DIR");
+            if (this.moving) {
+                this.isFunctionScheduled = true;
+                this.scheduled = function () {
+                    console.log("stopping");
+                    _this.moving = false;
+                    return _this.motorsDriver.moveAngle([0, 0, 0, 0], constants_1.Dt);
+                };
+                return 201;
+            }
+            else
+                return 200;
         }
-        if (this.movingDirection && this.movingDirection.isCollinear(dir))
-            return 204;
+        if (dir.equals(new Space_1.Point(-3, -3, -3))) {
+            console.log("IF LOST MOVE DIR");
+            if (this.moving) {
+                this.isFunctionScheduled = true;
+                this.scheduled = function () {
+                    console.log("CANCELLING");
+                    _this.moving = false;
+                    return _this.motorsDriver.moveAngle([0, 0, 0, 0], constants_1.Dt);
+                };
+                return 201;
+            }
+            else
+                return 200;
+            //TODO Resolver qué hacer cuando se pierde
+        }
+        /*if (this.movingDirection && this.movingDirection.isCollinear(dir))
+            return 204;*/
         var projection = Space_1.Point.intersectWithPrism(this.position, dir);
+        if (!projection) //No existe proyección. Imposible moverse. Devuelve 400
+            return 400;
+        console.log("Moving dir from " + this.position.toString() + " to Projection " + projection.toString());
         var distance = projection.sub(this.position).length();
         var time = 1000 * distance / speed;
         if (this.moving) {
@@ -89,11 +119,14 @@ var Positioning = /** @class */ (function () {
      */
     Positioning.prototype.moveToPoint = function (point, totalTime) {
         var _this = this;
+        console.log("moveTP");
+        console.log(point, totalTime);
+        console.log("moveTP");
         point.x = point.x === -10 ? this.position.x : point.x;
         point.y = point.y === -10 ? this.position.y : point.y;
         point.z = point.z === -10 ? this.position.z : point.z;
         //Ensure point lays inside the field
-        point.constrain([0, constants_1.FIELD_LENGTH], [0, constants_1.FIELD_WIDTH], [0, constants_1.FIELD_HEIGHT]);
+        point.constrain([20, constants_1.FIELD_LENGTH - 20], [20, constants_1.FIELD_WIDTH - 20], [0, constants_1.FIELD_HEIGHT]);
         var initial = this.position;
         var pathGenerator = function (T) {
             return new Space_1.Point(initial.x + T * (point.x - initial.x), initial.y + T * (point.y - initial.y), initial.z + T * (point.z - initial.z));
@@ -113,6 +146,10 @@ var Positioning = /** @class */ (function () {
         return this.moveToNextPoint(points)
             .then(function () {
             _this.moving = false;
+            if (_this.isFunctionScheduled) {
+                _this.isFunctionScheduled = false;
+                _this.scheduled();
+            }
         });
     };
     Positioning.prototype.moveMotors = function (angles, time) {
@@ -124,7 +161,9 @@ var Positioning = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        console.log("Moving to next point");
                         if (this.isFunctionScheduled) {
+                            console.log(this.scheduled);
                             this.isFunctionScheduled = false;
                             this.scheduled();
                             return [2 /*return*/, Promise.reject("Cancelled")];
@@ -142,9 +181,7 @@ var Positioning = /** @class */ (function () {
                         _a.sent();
                         this.position = point;
                         return [2 /*return*/, this.moveToNextPoint(points)];
-                    case 2:
-                        console.log("Done");
-                        return [2 /*return*/, this.motorsDriver.moveAngle([0, 0, 0, 0], constants_1.Dt)];
+                    case 2: return [2 /*return*/, this.motorsDriver.moveAngle([0, 0, 0, 0], constants_1.Dt)];
                 }
             });
         });

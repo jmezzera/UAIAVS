@@ -1,4 +1,5 @@
 import Motors from './Motors';
+// import Motors from './MotorsDummy'
 
 import { Point, Point4D, Direction } from './Space';
 import Sequence from './Sequences';
@@ -28,16 +29,42 @@ class Positioning {
     }
 
     public moveDir(dir: Point, speed?: number): number {
+        console.log("point: ", dir.x, dir.y, dir.z);
         if (!speed)
             speed = 10;
         if (dir.equals(new Point(0, 0, 0))) {
-            this.scheduled = () => this.motorsDriver.moveAngle([0, 0, 0, 0], Dt);
-            return 201;
+            console.log("IF ZERO MOVE DIR");
+            if (this.moving){
+                this.isFunctionScheduled = true;
+                this.scheduled = () => {
+                    console.log("stopping")
+                    this.moving = false;
+                    return this.motorsDriver.moveAngle([0, 0, 0, 0], Dt);
+                }
+                return 201;
+            } else
+                return 200;
         }
-        if (this.movingDirection && this.movingDirection.isCollinear(dir))
-            return 204;
-
+        if (dir.equals(new Point(-3, -3, -3))){
+            console.log("IF LOST MOVE DIR");
+            if (this.moving){
+                this.isFunctionScheduled = true;
+                this.scheduled = () => {
+                    console.log("CANCELLING")
+                    this.moving = false;
+                    return this.motorsDriver.moveAngle([0, 0, 0, 0], Dt);
+                }
+                return 201;
+            } else 
+                return 200
+            //TODO Resolver qué hacer cuando se pierde
+        }
+        /*if (this.movingDirection && this.movingDirection.isCollinear(dir))
+            return 204;*/
         const projection = Point.intersectWithPrism(this.position, dir);
+        if (!projection) //No existe proyección. Imposible moverse. Devuelve 400
+            return 400
+        console.log(`Moving dir from ${this.position.toString()} to Projection ${projection.toString()}`)
         const distance = projection.sub(this.position).length();
         const time = 1000 * distance / speed;
 
@@ -69,11 +96,14 @@ class Positioning {
      * moveToPoint
      */
     public moveToPoint(point: Point, totalTime: number): Promise<any> {
+        console.log("moveTP")
+        console.log(point, totalTime)
+        console.log("moveTP")
         point.x = point.x === -10 ? this.position.x : point.x
         point.y = point.y === -10 ? this.position.y : point.y
         point.z = point.z === -10 ? this.position.z : point.z
         //Ensure point lays inside the field
-        point.constrain([0, FIELD_LENGTH], [0, FIELD_WIDTH], [0, FIELD_HEIGHT]);
+        point.constrain([20, FIELD_LENGTH -20], [20, FIELD_WIDTH - 20], [0, FIELD_HEIGHT]);
 
         const initial = this.position;
         const pathGenerator = (T: number): Point => {
@@ -100,6 +130,10 @@ class Positioning {
         return this.moveToNextPoint(points)
             .then(() => {
                 this.moving = false;
+                if (this.isFunctionScheduled){
+                    this.isFunctionScheduled = false;
+                    this.scheduled();
+                }
             })
     }
 
@@ -108,7 +142,9 @@ class Positioning {
     }
 
     private async moveToNextPoint(points): Promise<any> {
+        console.log("Moving to next point")
         if (this.isFunctionScheduled) {
+            console.log(this.scheduled)
             this.isFunctionScheduled = false;
             this.scheduled();
             return Promise.reject("Cancelled");
@@ -128,7 +164,6 @@ class Positioning {
             this.position = point;
             return this.moveToNextPoint(points);
         } else {
-            console.log("Done");
             return this.motorsDriver.moveAngle([0, 0, 0, 0], Dt);
         }
     }

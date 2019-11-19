@@ -40,6 +40,34 @@ describe('Point testing', () => {
         expect(product.equals(result)).to.be.true;
     })
 
+    it('Equals', () => {
+        const p1 = new Space.Point(1,2,3);
+        const p2 = new Space.Point(1,2,3);
+
+        expect(p1.equals(p2)).to.be.true;
+    })
+
+    it('Zero equals', () => {
+        const p1 = new Space.Point(0,0,0);
+        const p2 = new Space.Point(0,0,0);
+
+        expect(p1.equals(p2)).to.be.true;
+    })
+
+    it('Zero not equals', () => {
+        const p1 = new Space.Point(0,0,0);
+        const p2 = new Space.Point(0,0,1);
+
+        expect(p1.equals(p2)).to.be.false;
+    })
+
+    it('Not Equals', () => {
+        const p1 = new Space.Point(1,2,3);
+        const p2 = new Space.Point(1,2,2);
+
+        expect(p1.equals(p2)).to.be.false;
+    })
+
     it('Length', () => {
         const v = new Space.Point(1,2,3);
         const result = Math.sqrt(14);
@@ -81,6 +109,7 @@ describe('Point testing', () => {
     
             expect(v1.isCollinear(v2)).to.be.true;
         })
+
     })
         
     describe('Intersection testing', () => {

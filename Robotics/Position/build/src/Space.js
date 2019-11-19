@@ -11,6 +11,9 @@ exports.Direction = Direction;
 var Point = /** @class */ (function () {
     function Point(x, y, z) {
         var _this = this;
+        this.toString = function () {
+            return "(" + _this.x + ", " + _this.y + ", " + _this.z + ")";
+        };
         this.add = function (other) {
             return new Point(_this.x + other.x, _this.y + other.y, _this.z + other.z);
         };
@@ -81,8 +84,8 @@ var Point = /** @class */ (function () {
             //Implicaría que la recta es paralela a la cara. Hay infinitas o ninguna solución
             if (!isFinite(k))
                 continue;
-            //Implicaría que la proyección queda atrás (dirección opuesta a dir)
-            if (k < 0)
+            //Implicaría que la proyección queda atrás (dirección opuesta a dir) o sobre la cara 
+            if (k <= 0)
                 continue;
             var p = r.add(dir.mult(k));
             //El plano contiene al punto pero la cara no.

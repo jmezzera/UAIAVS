@@ -59,4 +59,4 @@ var Motors = /** @class */ (function () {
     return Motors;
 }());
 exports.default = Motors;
-//# sourceMappingURL=Motors.js.map
+//# sourceMappingURL=Motors copy.js.map

@@ -13,9 +13,6 @@ var io = socket(server);
 var connectedClient = null;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.get('/', function (req, res) {
-    console.log("hola");
-});
 var positionChanged = function (newPos) {
     if (connectedClient) {
         connectedClient.emit('position', newPos);
@@ -43,7 +40,9 @@ app.post('/moveDelta', function (req, res) {
 });
 app.post('/moveDir', function (req, res) {
     var _a = req.body, x = _a.x, y = _a.y, z = _a.z;
-    var status = positioning.moveDir(new Space_1.Point(x, y, z));
+    var parsedSpeed = parseInt(req.body.speed);
+    var speed = isNaN(parsedSpeed) ? 10 : parsedSpeed;
+    var status = positioning.moveDir(new Space_1.Point(x, y, z), speed);
     res.sendStatus(status);
 });
 app.post('/moveMotor/:motor', function (req, res) {
@@ -121,7 +120,6 @@ io.on("connection", function (socket) {
         var x = delta.x, y = delta.y, z = delta.z;
         var time = delta.time * 1000;
         positioning.moveDelta(new Space_1.Point(x, y, z), time);
-        console.log(delta);
     });
     socket.on("disconnect", function () {
         connectedClient = null;

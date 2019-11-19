@@ -66,8 +66,6 @@ class Motors {
             this._DIRS[i].digitalWrite(directions[i]);
         }
 
-        console.log(`moving ${angles}`);
-        console.log('Línea enviada: ', serialLine);
         return delayPromise(time);
     }
 

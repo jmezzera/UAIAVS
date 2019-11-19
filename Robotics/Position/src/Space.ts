@@ -22,6 +22,10 @@ class Point {
         this.z = z;
     }
 
+    public toString = (): string => {
+        return `(${this.x}, ${this.y}, ${this.z})`;
+    }
+
     public add = (other: Point): Point => {
         return new Point(this.x + other.x, this.y + other.y, this.z + other.z);
     }
@@ -97,8 +101,8 @@ class Point {
             if (!isFinite(k))
                 continue;
 
-            //Implicaría que la proyección queda atrás (dirección opuesta a dir)
-            if (k < 0)
+            //Implicaría que la proyección queda atrás (dirección opuesta a dir) o sobre la cara 
+            if (k <= 0)
                 continue;
 
             let p = r.add(dir.mult(k));

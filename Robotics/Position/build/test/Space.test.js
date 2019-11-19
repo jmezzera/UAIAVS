@@ -31,6 +31,26 @@ describe('Point testing', function () {
         var result = new Space.Point(16, 8, 12);
         chai_1.expect(product.equals(result)).to.be.true;
     });
+    it('Equals', function () {
+        var p1 = new Space.Point(1, 2, 3);
+        var p2 = new Space.Point(1, 2, 3);
+        chai_1.expect(p1.equals(p2)).to.be.true;
+    });
+    it('Zero equals', function () {
+        var p1 = new Space.Point(0, 0, 0);
+        var p2 = new Space.Point(0, 0, 0);
+        chai_1.expect(p1.equals(p2)).to.be.true;
+    });
+    it('Zero not equals', function () {
+        var p1 = new Space.Point(0, 0, 0);
+        var p2 = new Space.Point(0, 0, 1);
+        chai_1.expect(p1.equals(p2)).to.be.false;
+    });
+    it('Not Equals', function () {
+        var p1 = new Space.Point(1, 2, 3);
+        var p2 = new Space.Point(1, 2, 2);
+        chai_1.expect(p1.equals(p2)).to.be.false;
+    });
     it('Length', function () {
         var v = new Space.Point(1, 2, 3);
         var result = Math.sqrt(14);

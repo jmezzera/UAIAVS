@@ -17,10 +17,6 @@ let connectedClient: socket.Socket = null;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-    console.log("hola");
-})
-
 const positionChanged = (newPos: Point): void => {
     if (connectedClient) {
         connectedClient.emit('position', newPos);
@@ -59,7 +55,11 @@ app.post('/moveDelta', (req, res) => {
 app.post('/moveDir', (req, res) => {
     const {x, y, z} = req.body;
 
-    const status = positioning.moveDir(new Point(x, y, z));
+    const parsedSpeed = parseInt(req.body.speed);
+    const speed = isNaN(parsedSpeed) ? 10 : parsedSpeed;
+
+
+    const status = positioning.moveDir(new Point(x, y, z), speed);
     
     res.sendStatus(status);
 })
@@ -145,7 +145,6 @@ io.on("connection", (socket: socket.Socket) => {
         const { x, y, z } = delta;
         const time = delta.time * 1000
         positioning.moveDelta(new Point(x, y, z), time);
-        console.log(delta);
     })
 
 
