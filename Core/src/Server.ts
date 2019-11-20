@@ -46,6 +46,11 @@ export default class Server implements IServer {
                 this.positioning.moveDelta(x, y, z, time);
             });
 
+            socket.on('moveToPoint', data => {
+                const { x, y, z, time } = data;
+                this.positioning.moveToPoint(x, y, z, time);
+            });
+
             socket.on('setPoint', (data: { point: string }) => {
                 const { x, y, z } = FIXED_POINTS[data.point];
                 this.positioning.moveToPoint(x, y, z, 5);

@@ -21,8 +21,11 @@ export default class MovementWithSockets implements Movement {
 
 
     }
-    public moveToPoint(x: number, y: number, z: number, t: number) {
-        throw new Error("Method not implemented.");
+    public moveToPoint(x: number, y: number, z: number, time: number) {
+        if (x !== -10 || y !== -10)
+            throw new Error("Method not allowed.");
+        else
+            this._socket.emit('moveToPoint', {x, y, z, time})
     }
 
     public moveToSetPoint(point: SetPoint){
