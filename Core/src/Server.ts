@@ -18,6 +18,7 @@ export default class Server implements IServer {
     private _positioning: Positioning;
     private _angles: Angles;
     private videoArchive: IVideoArchive;
+    private automaticMode: false;
     constructor() {
         this.app = express();
         this.server = http.createServer();

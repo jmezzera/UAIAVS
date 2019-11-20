@@ -3,7 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const request = require("request");
 const ioClient = require("socket.io-client");
 const express_1 = require("express");
-const POSITIONING_URL = 'http://192.168.43.251:8080';
+const config_1 = require("../config");
+const POSITIONING_URL = config_1.default.PositioningUrl;
 exports.FIXED_POINTS = {
     "CENTER_TOP": { x: 100, y: 75, z: 0 },
     "CENTER_CENTER": { x: 100, y: 75, z: 50 },
@@ -39,6 +40,19 @@ class Positioning {
             },
             body: JSON.stringify({
                 x, y, z, time
+            })
+        }, (err, resp, body) => {
+            console.log(err, body);
+        });
+    }
+    moveDir(x, y, z, speed) {
+        console.log("Moving dir", x, y, z);
+        request.post(POSITIONING_URL + '/moveDir', {
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({
+                x, y, z, speed
             })
         }, (err, resp, body) => {
             console.log(err, body);
@@ -84,6 +98,11 @@ class Positioning {
         this._router.post('/moveDelta', (req, res) => {
             const { x, y, z, time } = req.body;
             this.moveDelta(x, y, z, time);
+            res.sendStatus(200);
+        });
+        this._router.post('/moveDir', (req, res) => {
+            const { x, y, z, speed } = req.body;
+            this.moveDir(x, y, z, speed);
             res.sendStatus(200);
         });
         this._router.post('/admin/setPosition', (req, res) => {

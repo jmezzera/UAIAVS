@@ -1,9 +1,10 @@
 import socketIOClient from 'socket.io-client';
 
+import config from '../config';
+
 
 const createSocket = () => {
-    const url = "http://localhost:8081";
-    return socketIOClient(url);
+    return socketIOClient(config.serverSocket);
 }
 
 export { createSocket };

@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const request = require("request");
-const url = "http://10.0.0.11:8080";
+const config_1 = require("../config");
+const url = config_1.default.AnglesUrl;
 class Angles {
     moveDelta(theta, phi) {
         throw new Error("Method not implemented.");
@@ -10,7 +11,7 @@ class Angles {
         throw new Error("Method not implemented.");
     }
     moveTheta(angle) {
-        request.patch(url + '/servo/1', {
+        request.patch(url + '/servos/0', {
             headers: {
                 "content-type": "application/json"
             },
@@ -18,7 +19,7 @@ class Angles {
         });
     }
     movePhi(angle) {
-        request.patch(url + '/servo/2', {
+        request.patch(url + '/servos/1', {
             headers: {
                 "content-type": "application/json"
             },
