@@ -1,0 +1,14 @@
+.botonera{
+    position: relative;
+    width: 18vw;
+    height: 20%;
+    margin: auto;
+    margin-top: 2%;
+    z-index: 10;
+}
+.boton{
+    width: 3.5vw !important;
+    height: 3.5vw !important;
+    background-color: white !important;
+    margin: 0.5vw !important;
+}
