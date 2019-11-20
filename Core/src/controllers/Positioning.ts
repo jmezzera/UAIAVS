@@ -57,6 +57,19 @@ export default class Positioning implements IPositioning {
             console.log(err, body);
         })
     }
+    moveDir(x: number, y: number, z: number, speed: number): void {
+        console.log("Moving dir", x, y, z);
+        request.post(POSITIONING_URL + '/moveDir', {
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({
+                x, y, z, speed
+            })
+        }, (err, resp, body) => {
+            console.log(err, body);
+        })
+    }
     setPosition(x: number, y: number, z: number): void {
         console.info("Setting position", x, y, z);
         request.post(POSITIONING_URL + '/admin/setPosition', {
@@ -101,10 +114,15 @@ export default class Positioning implements IPositioning {
             this.moveDelta(x, y, z, time);
             res.sendStatus(200);
         });
+        this._router.post('/moveDir', (req, res) => {
+            const { x, y, z, speed } = req.body;
+            this.moveDir(x, y, z, speed);
+            res.sendStatus(200);
+        });
         this._router.post('/admin/setPosition', (req, res) => {
             const { x, y, z } = req.body;
             this.setPosition(x, y, z);
-        })
+        });
         this._router.patch('/admin/motorsPower', (req, res) => {
             const power = req.body.power;
             this.setMotorsPower(power);
