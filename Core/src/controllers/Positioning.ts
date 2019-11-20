@@ -2,9 +2,12 @@ import * as request from 'request';
 import * as ioClient from 'socket.io-client';
 import { Router } from 'express';
 
+import config from '../config';
+
 import IPositioning from "../interfaces/IPositioning";
 
-const POSITIONING_URL = 'http://192.168.43.251:8080'
+const POSITIONING_URL = config.PositioningUrl;
+
 export const FIXED_POINTS = {
     "CENTER_TOP": { x: 100, y: 75, z: 0 },
     "CENTER_CENTER": { x: 100, y: 75, z: 50 },

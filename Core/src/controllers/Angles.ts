@@ -1,8 +1,11 @@
 import * as request from 'request';
 
+import config from '../config';
+
 import IAngles from "../interfaces/IAngles";
 
-const url = "http://10.0.0.11:8080";
+
+const url = config.AnglesUrl;
 
 export default class Angles implements IAngles {
     private _angles: { theta: number; phi: number; };
