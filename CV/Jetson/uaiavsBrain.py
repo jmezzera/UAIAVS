@@ -156,7 +156,7 @@ if __name__ == "__main__":
 	# out = cv2.VideoWriter(SAVE_PATH, fourcc, int(capture.get(5)), size)
 
 	#inst_queue = Queue()
-	inst = MyInst((0,0,0))
+	inst = MyInst(dm.instruction(0,0,0))
 
 	ch = connectionHandler(MOTOR_API+MOVE_DELTA_ENDPOINT)
 	ch_thread = threading.Thread(target=ch.run, args=[inst, threadLockInst])
