@@ -4,26 +4,33 @@ const express = require("express");
 const socket = require("socket.io");
 const http = require("http");
 const CORS = require("cors");
+const bodyParser = require("body-parser");
 const StreamingSocket_1 = require("./controllers/StreamingSocket");
 const Positioning_1 = require("./controllers/Positioning");
 const Angles_1 = require("./controllers/Angles");
+const Admin_1 = require("./controllers/Admin");
 const VideoArchive_1 = require("./controllers/VideoArchive");
 class Server {
     constructor() {
+        this.automaticMode = false;
         this.app = express();
         this.server = http.createServer();
         this.io = socket(this.server);
         let cors = CORS();
+        this._app.use(bodyParser.urlencoded({ extended: false }));
+        this._app.use(bodyParser.json());
         this._app.use(cors);
         this.streamingSocket = new StreamingSocket_1.default(8082);
         this.angles = new Angles_1.default();
+        this._admin = new Admin_1.default(this.setMode);
         this.positioning = new Positioning_1.default((position) => {
             this.io.emit('position', position);
-        });
+        }, this.getMode);
         this.videoArchive = new VideoArchive_1.default(this._streamingSocket);
         this._app.use('/myStream', this.streamingSocket.request);
         this._app.use('/position', this.positioning.router);
         this._app.use('/videos', this.videoArchive.router);
+        this._app.use('/admin', this.admin.router);
         this.io.on("connection", socket => {
             console.log("Client connected");
             socket.on('moveDelta', data => {
@@ -60,6 +67,12 @@ class Server {
         this._app.listen(8080);
         this.server.listen(8081);
     }
+    setMode(automatic) {
+        this.automaticMode = automatic;
+    }
+    getMode() {
+        return this.automaticMode;
+    }
     /**
      * Getter app
      * @return {Express.Application}
@@ -94,6 +107,9 @@ class Server {
      */
     get positioning() {
         return this._positioning;
+    }
+    get admin() {
+        return this._admin;
     }
     /**
      * Setter app

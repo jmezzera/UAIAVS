@@ -12,8 +12,9 @@ exports.FIXED_POINTS = {
     "LEFT_GOAL": { x: 30, y: 75, z: 0 }
 };
 class Positioning {
-    constructor(positionChanged) {
+    constructor(positionChanged, getMode) {
         this.positionChanged = positionChanged;
+        this.getMode = getMode;
         this.socket = ioClient(POSITIONING_URL);
         this.socket.on('position', (position) => this.position = position);
         this._router = express_1.Router();
@@ -89,6 +90,12 @@ class Positioning {
             body
         }, (err, resp, body) => console.log(err, body));
     }
+    allowedToMove(req, res, next) {
+        if (req.body.caller === "UI" || this.getMode() === true)
+            next();
+        else
+            res.sendStatus(403);
+    }
     initializeRoutes() {
         this._router.post('/moveToPoint', (req, res) => {
             const { x, y, z, time } = req.body;
@@ -100,7 +107,7 @@ class Positioning {
             this.moveDelta(x, y, z, time);
             res.sendStatus(200);
         });
-        this._router.post('/moveDir', (req, res) => {
+        this._router.post('/moveDir', this.allowedToMove, (req, res) => {
             const { x, y, z, speed } = req.body;
             this.moveDir(x, y, z, speed);
             res.sendStatus(200);

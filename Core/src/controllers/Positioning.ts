@@ -1,6 +1,6 @@
 import * as request from 'request';
 import * as ioClient from 'socket.io-client';
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 
 import config from '../config';
 
@@ -19,9 +19,11 @@ export default class Positioning implements IPositioning {
     private _router: Router;
     private _position: { x: number, y: number, z: number };
     private positionChanged: (position: { x: number, y: number, z: number }) => void;
+    private getMode: () => boolean;
 
-    constructor(positionChanged?: (position: { x: number, y: number, z: number }) => void) {
+    constructor(positionChanged?: (position: { x: number, y: number, z: number }) => void, getMode?: () => boolean) {
         this.positionChanged = positionChanged;
+        this.getMode = getMode;
 
         this.socket = ioClient(POSITIONING_URL);
         this.socket.on('position', (position: { x: number, y: number, z: number }) => this.position = position);
@@ -103,6 +105,13 @@ export default class Positioning implements IPositioning {
             }, (err, resp, body) => console.log(err, body))
     }
 
+    private allowedToMove(req: Request, res: Response, next: any){
+        if (req.body.caller === "UI" || this.getMode() === true)
+            next();
+        else
+            res.sendStatus(403);
+    }
+
     initializeRoutes() {
         this._router.post('/moveToPoint', (req, res) => {
             const { x, y, z, time } = req.body;
@@ -114,7 +123,7 @@ export default class Positioning implements IPositioning {
             this.moveDelta(x, y, z, time);
             res.sendStatus(200);
         });
-        this._router.post('/moveDir', (req, res) => {
+        this._router.post('/moveDir', this.allowedToMove, (req, res) => {
             const { x, y, z, speed } = req.body;
             this.moveDir(x, y, z, speed);
             res.sendStatus(200);
