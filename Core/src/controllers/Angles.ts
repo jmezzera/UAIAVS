@@ -17,7 +17,7 @@ export default class Angles implements IAngles {
     }
 
     public moveTheta(angle: number): void {
-        request.patch(url + '/servo/1', {
+        request.patch(url + '/servos/0', {
             headers: {
                 "content-type": "application/json"
             },
@@ -27,7 +27,7 @@ export default class Angles implements IAngles {
     }
 
     public movePhi(angle: number): void {
-        request.patch(url + '/servo/2', {
+        request.patch(url + '/servos/1', {
             headers: {
                 "content-type": "application/json"
             },
