@@ -29,6 +29,8 @@ import IRecording from './services/IRecording';
 import Recording from './services/Recording';
 import IAngles from './services/IAngles';
 import Angles from './services/AnglesSockets';
+import IMode from './services/IMode';
+import Mode from './services/Mode';
 
 type AppState = {
   position: { x: number, y: number, z: number },
@@ -45,6 +47,7 @@ class App extends Component<{}, AppState> {
   private movement: Movement;
   private anglesController: IAngles;
   private recordingController: IRecording;
+  private modeController: IMode;
   private interval: any;
   constructor(props: any) {
     super(props);
@@ -70,6 +73,7 @@ class App extends Component<{}, AppState> {
     this.movement = new MovementWithSockets(this.socket);
     this.anglesController = new Angles(this.socket);
     this.recordingController = new Recording(this.socket);
+    this.modeController = new Mode();
   }
   positionReceived(position: { x: number, y: number, z: number }) {
     this.setState({ position });
@@ -101,7 +105,7 @@ class App extends Component<{}, AppState> {
       <>
         <div className="leftColumn">
           <div className="switchDiv">
-            <MySwitch></MySwitch>
+            <MySwitch controller={this.modeController}></MySwitch>
             <div className="operationModeLabels">
               <div className="manual"><strong> Manual </strong></div>
               <div className="automatic"><strong> Automático </strong></div>
