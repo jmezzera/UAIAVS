@@ -36,10 +36,10 @@ const PrettoSlider = withStyles({
   })(Slider);
 
 type SliderProps = {
-  handleChange: (value: number) => void
+  handleChange: (value: number) => void,
+  sliderValue: number,
 };
 type SliderState = {
-  sliderValue: number,
   readyToSend: boolean,
 
 }
@@ -49,7 +49,6 @@ export default class MySlider extends Component<SliderProps, SliderState> {
     constructor(props: SliderProps){
         super(props);
         this.state = {
-          sliderValue: 100,
           readyToSend: true,
         }
         this.handleChange = this.handleChange.bind(this);
@@ -61,7 +60,6 @@ export default class MySlider extends Component<SliderProps, SliderState> {
 
         this.props.handleChange(value);
         this.setState({
-          sliderValue: value,
           readyToSend: false,
         })
         setTimeout(() => {
@@ -75,7 +73,7 @@ export default class MySlider extends Component<SliderProps, SliderState> {
     render(){
         return (
             <div className="slider-wrapper">
-                <PrettoSlider valueLabelDisplay="auto" aria-label="pretto slider" orientation="vertical" defaultValue={100} onChange={this.handleChange}/>
+                <PrettoSlider value={100 - this.props.sliderValue} valueLabelDisplay="auto" aria-label="pretto slider" orientation="vertical" defaultValue={100} onChange={this.handleChange}/>
             </div>
         )
     }

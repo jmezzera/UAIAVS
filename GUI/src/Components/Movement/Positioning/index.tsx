@@ -28,6 +28,7 @@ export default class Positioning extends Component<PositioningProps, {}>{
     }
 
     moveZ(value: number){
+        value = 100 - value;
         this.movement.moveToPoint(-10, -10,  value, 500);
     }
 
@@ -38,7 +39,7 @@ export default class Positioning extends Component<PositioningProps, {}>{
                     <MyJoystick size={150} move={this.move}></MyJoystick>
                 </div>
                 <div>
-                    <MySlider handleChange={this.moveZ}></MySlider>
+                    <MySlider sliderValue={this.props.position.z} handleChange={this.moveZ}></MySlider>
                 </div>
                 {/* <ReactSlider 
                     className="vertical-slider"
