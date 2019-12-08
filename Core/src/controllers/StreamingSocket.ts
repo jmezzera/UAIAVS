@@ -41,8 +41,8 @@ export default class StreamingSocket extends websocket.Server {
     }
 
     stopRecording = () => {
-        this.savingStream.end()
-        this.savingStream = null;
+        // this.savingStream.end()
+        // this.savingStream = null;
     }
 
     request = (req: any, res: any) => {

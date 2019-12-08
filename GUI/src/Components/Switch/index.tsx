@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import './styles.css';
+import IMode from '../../services/IMode';
 
-type SwitchProps = {};
+type SwitchProps = {
+    controller: IMode
+};
 type SwitchState = {
     checked: boolean,
     backgroundColor: string
@@ -18,6 +21,7 @@ export default class MySwitch extends Component<SwitchProps, SwitchState> {
         let newState = (this.state.checked) ? false : true;
         let newBg = (this.state.checked) ? "#000000" : "#80ff80";
         this.setState({ checked: newState, backgroundColor: newBg });
+        this.props.controller.setMode(newState);
     }
     
     render(){
