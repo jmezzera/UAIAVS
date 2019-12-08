@@ -13,6 +13,7 @@ exports.FIXED_POINTS = {
 };
 class Positioning {
     constructor(positionChanged, getMode) {
+        this.allowedToMove = this.allowedToMove.bind(this);
         this.positionChanged = positionChanged;
         this.getMode = getMode;
         this.socket = ioClient(POSITIONING_URL);
@@ -91,6 +92,8 @@ class Positioning {
         }, (err, resp, body) => console.log(err, body));
     }
     allowedToMove(req, res, next) {
+        console.log(req.body.caller);
+        console.log(this.getMode());
         if (req.body.caller === "UI" || this.getMode() === true)
             next();
         else

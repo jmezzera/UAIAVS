@@ -15,6 +15,7 @@ export const FIXED_POINTS = {
     "LEFT_GOAL": { x: 30, y: 75, z: 0}
 }
 export default class Positioning implements IPositioning {
+    
     private socket: SocketIOClient.Socket;
     private _router: Router;
     private _position: { x: number, y: number, z: number };
@@ -22,6 +23,7 @@ export default class Positioning implements IPositioning {
     private getMode: () => boolean;
 
     constructor(positionChanged?: (position: { x: number, y: number, z: number }) => void, getMode?: () => boolean) {
+        this.allowedToMove = this.allowedToMove.bind(this);
         this.positionChanged = positionChanged;
         this.getMode = getMode;
 
@@ -106,6 +108,9 @@ export default class Positioning implements IPositioning {
     }
 
     private allowedToMove(req: Request, res: Response, next: any){
+        console.log(req.body.caller)
+        console.log(this.getMode())
+
         if (req.body.caller === "UI" || this.getMode() === true)
             next();
         else

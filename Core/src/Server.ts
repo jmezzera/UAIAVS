@@ -23,6 +23,8 @@ export default class Server implements IServer {
     private videoArchive: IVideoArchive;
     private automaticMode = false;
     constructor() {
+        this.getMode = this.getMode.bind(this);
+        this.setMode = this.setMode.bind(this);
         this.app = express();
         this.server = http.createServer();
         this.io = socket(this.server);
@@ -35,7 +37,7 @@ export default class Server implements IServer {
 
         this.angles = new Angles();
 
-        this._admin = new Admin(this.setMode);
+        this._admin = new Admin(this.setMode, this.getMode);
 
         this.positioning = new Positioning((position: { x: number, y: number, z: number }) => {
             this.io.emit('position', position);

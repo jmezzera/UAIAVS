@@ -13,6 +13,8 @@ const VideoArchive_1 = require("./controllers/VideoArchive");
 class Server {
     constructor() {
         this.automaticMode = false;
+        this.getMode = this.getMode.bind(this);
+        this.setMode = this.setMode.bind(this);
         this.app = express();
         this.server = http.createServer();
         this.io = socket(this.server);
@@ -22,7 +24,7 @@ class Server {
         this._app.use(cors);
         this.streamingSocket = new StreamingSocket_1.default(8082);
         this.angles = new Angles_1.default();
-        this._admin = new Admin_1.default(this.setMode);
+        this._admin = new Admin_1.default(this.setMode, this.getMode);
         this.positioning = new Positioning_1.default((position) => {
             this.io.emit('position', position);
         }, this.getMode);

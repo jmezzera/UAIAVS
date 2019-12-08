@@ -5,10 +5,13 @@ export default class Admin {
     private _router: express.Router;
 
     private setMode: (boolean) => void;
+    private getMode: () => boolean;
 
-    constructor(setMode: (boolean) => void){
+
+    constructor(setMode: (boolean) => void, getMode: () => boolean){
         this._router = express.Router();
         this.setMode = setMode;
+        this.getMode = getMode;
         this.initializeRoutes();
     }
 
@@ -18,6 +21,9 @@ export default class Admin {
             this.setMode(mode);
             res.sendStatus(200);
         });
+        this._router.get('/mode', (req: express.Request, res: express.Response) => {
+            res.status(200).send(this.getMode());
+        })
     }
 
     public get router(): express.Router{

@@ -20,6 +20,7 @@ class camera:
                 #self.ffmpeg_command_GUI = " -f mp4 -codec:v libx264 -s 640x480 -b:v 400k -bf 0 -an "
 
                 self.GUI_target = "http://localhost:8080/mystream"
+                self.save_output = "output.mp4"
                 #self.GUI_target = "http://10.0.0.102:8080/mystream"
                 #self.save_output_as_mp4 = " output.mp4"
                 #self.second_command = " -fflags nobuffer -flags low_delay -s 640x480 -b:v 800k -r 30 -an -f mpegts udp://127.0.0.1:10000"
@@ -27,7 +28,7 @@ class camera:
 
         def keep_alive(self):
                 #print("keep alive")
-                self.gopro.stream(self.options+self.source+self.ffmpeg_command_GUI+self.GUI_target)
+                self.gopro.stream(self.options+self.source+self.ffmpeg_command_GUI+self.GUI_target+self.ffmpeg_command_GUI+self.save_output)
                 #self.gopro.stream(self.options+self.source)
 
 
