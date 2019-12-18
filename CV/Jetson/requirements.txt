@@ -1,4 +1,4 @@
 --pre --extra-index-url https://developer.download.nvidia.com/compute/redist/jp/v42 tensorflow-gpu==1.14.0+nv19.7
-requests==2.18.4
+requests==2.20.0
 goprocam==3.0.9
 tqdm==4.36.1
