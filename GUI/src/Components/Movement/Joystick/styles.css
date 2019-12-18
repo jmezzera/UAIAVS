@@ -1,0 +1,23 @@
+.joystick-wrapper{
+    position: relative;
+    width: 25vw;
+    height: 30vw;
+    overflow: hidden;
+}
+
+.joystick {
+    position: relative;
+    width: 45%;
+    display: block;
+    margin: auto; 
+    top: 25%;
+    left: -10%;
+}
+
+.joystick div {
+    background-color:  #004d00 !important;
+}
+
+.joystick div div {
+    background-color: #80ff80 !important;
+}

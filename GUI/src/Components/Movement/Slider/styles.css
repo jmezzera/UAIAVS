@@ -1,0 +1,22 @@
+.slider-wrapper {
+    position: absolute;
+    top: 20%;
+    right: 0%;
+    display: block;
+    margin-top: 5%;
+    width: 20%;
+    height: 25vh;
+}
+
+.MuiSlider-vertical .MuiSlider-track {
+  width: 30% !important;
+}
+ 
+.MuiSlider-root.MuiSlider-vertical {
+  width: 30% !important;
+}
+
+.MuiSlider-vertical .MuiSlider-rail {
+  width: 30% !important;
+  background: #004d00;
+}
