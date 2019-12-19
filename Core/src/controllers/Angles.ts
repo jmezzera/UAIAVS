@@ -26,6 +26,15 @@ export default class Angles implements IAngles {
 
     }
 
+    public moveToTheta(theta: number): void {
+        request.post(url + '/servos/0', {
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({ angle: theta })
+        })
+    }
+
     public movePhi(angle: number): void {
         request.patch(url + '/servos/1', {
             headers: {
@@ -34,6 +43,15 @@ export default class Angles implements IAngles {
             body: JSON.stringify({ angle })
         })
 
+    }
+
+    public moveToPhi(phi: number): void {
+        request.post(url + '/servos/1', {
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({ angle: phi })
+        })
     }
 
     public get angles() {

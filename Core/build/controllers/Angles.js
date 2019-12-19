@@ -18,12 +18,28 @@ class Angles {
             body: JSON.stringify({ angle })
         });
     }
+    moveToTheta(theta) {
+        request.post(url + '/servos/0', {
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({ angle: theta })
+        });
+    }
     movePhi(angle) {
         request.patch(url + '/servos/1', {
             headers: {
                 "content-type": "application/json"
             },
             body: JSON.stringify({ angle })
+        });
+    }
+    moveToPhi(phi) {
+        request.post(url + '/servos/1', {
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({ angle: phi })
         });
     }
     get angles() {

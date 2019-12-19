@@ -4,10 +4,13 @@ import IVideoArchive from '../interfaces/IVideoArchive'
 import { dirname } from 'path';
 import { Router } from 'express';
 import StreamingSocket from './StreamingSocket';
+import * as childProcess from 'child_process';
+
 
 export default class VideoArchive implements IVideoArchive {
     private _router: Router;
     private _socket: StreamingSocket;
+    private _recordingProcess: childProcess.ChildProcessWithoutNullStreams;
     constructor(socket: StreamingSocket) {
         this._router = Router();
         this._router.get('/', (req, res) => {
@@ -20,40 +23,40 @@ export default class VideoArchive implements IVideoArchive {
             const video = req.params.video;
             console.log("getting video", video)
             const path = __dirname + '/../../static/videos/' + video;
-            //     const stat = fs.statSync(path)
-            //     const fileSize = stat.size
-            //     const range = req.headers.range
+                const stat = fs.statSync(path)
+                const fileSize = stat.size
+                const range = req.headers.range
 
-            //     if (range) {
-            //         const parts = range.replace(/bytes=/, "").split("-")
-            //         const start = parseInt(parts[0], 10)
-            //         const end = parts[1]
-            //             ? parseInt(parts[1], 10)
-            //             : fileSize - 1
+                if (range) {
+                    const parts = range.replace(/bytes=/, "").split("-")
+                    const start = parseInt(parts[0], 10)
+                    const end = parts[1]
+                        ? parseInt(parts[1], 10)
+                        : fileSize - 1
 
-            //         const chunksize = (end - start) + 1
-            //         const file = fs.createReadStream(path, { start, end })
-            //         const head = {
-            //             'Content-Range': `bytes ${start}-${end}/${fileSize}`,
-            //             'Accept-Ranges': 'bytes',
-            //             'Content-Length': chunksize,
-            //             'Content-Type': 'video/mp4',
-            //         }
+                    const chunksize = (end - start) + 1
+                    const file = fs.createReadStream(path, { start, end })
+                    const head = {
+                        'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+                        'Accept-Ranges': 'bytes',
+                        'Content-Length': chunksize,
+                        'Content-Type': 'video/mp4',
+                    }
 
-            //         res.writeHead(206, head)
-            //         file.pipe(res)
-            //     } else {
-            //         const head = {
-            //             'Content-Length': fileSize,
-            //             'Content-Type': 'video/mp4',
-            //         }
-            //         res.writeHead(200, head)
-            //         fs.createReadStream(path, {highWaterMark: 10}).pipe(res)
-            //     }
-            // })
-            this.playVideo(video);
-            res.sendStatus(200);
-        })
+                    res.writeHead(206, head)
+                    file.pipe(res)
+                } else {
+                    const head = {
+                        'Content-Length': fileSize,
+                        'Content-Type': 'video/mp4',
+                    }
+                    res.writeHead(200, head)
+                    fs.createReadStream(path, {highWaterMark: 10}).pipe(res)
+                }
+            })
+            // this.playVideo(video);
+            // res.sendStatus(200);
+        // })
         this._router.delete('/:video', (req, res) => {
             const video = req.params.video;
             this.deleteVideo(video)
@@ -65,7 +68,8 @@ export default class VideoArchive implements IVideoArchive {
                         res.status(500).send(err)
                 })
         });
-
+    
+        this._recordingProcess = childProcess.spawn('python3', ['record.py']);
 
         this._socket = socket;
     }
@@ -128,6 +132,14 @@ export default class VideoArchive implements IVideoArchive {
 
     public get router(): Router {
         return this._router;
+    }
+    
+    public startRecording() {
+        this._recordingProcess.stdin.write('start\n', 'utf-8');
+    }
+
+    public stopRecording() {
+        this._recordingProcess.stdin.write('stop\n', 'utf-8');
     }
 
 }

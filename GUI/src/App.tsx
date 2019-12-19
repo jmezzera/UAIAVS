@@ -37,7 +37,8 @@ type AppState = {
   angles: { theta: number, phi: number },
   showingArchive: boolean,
   recording: boolean,
-  showRec: boolean
+  showRec: boolean,
+  playingVideo: string;
 }
 
 const sequences = [Sequence.Round, Sequence.Middle_Length, Sequence.Middle_Width, Sequence.DIAGONAL];
@@ -60,7 +61,8 @@ class App extends Component<{}, AppState> {
       },
       showingArchive: false,
       recording: false,
-      showRec: true
+      showRec: true,
+      playingVideo: "",
     }
     this.positionReceived = this.positionReceived.bind(this);
     this.startRecording = this.startRecording.bind(this);
@@ -73,7 +75,7 @@ class App extends Component<{}, AppState> {
     this.movement = new MovementWithSockets(this.socket);
     this.anglesController = new Angles(this.socket);
     this.recordingController = new Recording(this.socket);
-    this.modeController = new Mode();
+    this.modeController = new Mode(this.anglesController);
   }
   positionReceived(position: { x: number, y: number, z: number }) {
     this.setState({ position });
@@ -152,11 +154,13 @@ class App extends Component<{}, AppState> {
 
   renderArchive(): ReactNode {
     return (
-      <div className="test" style={{backgroundColor: "red"}}>
+      <div className="test" >
          <div className="leftColumn">
-           <VideoList></VideoList>
+           <VideoList playVideo={(video: string) => {
+             this.setState({playingVideo: video})
+           }}></VideoList>
          </div>
-        {/* <ArchiveVideoPlayer ></ArchiveVideoPlayer> */}
+         <ArchiveVideoPlayer video={this.state.playingVideo}></ArchiveVideoPlayer> 
       </div>
     )
 
