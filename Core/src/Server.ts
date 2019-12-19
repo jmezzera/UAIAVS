@@ -37,12 +37,12 @@ export default class Server implements IServer {
 
         this.angles = new Angles();
 
-        this._admin = new Admin(this.setMode, this.getMode);
-
         this.positioning = new Positioning((position: { x: number, y: number, z: number }) => {
             this.io.emit('position', position);
         }, this.getMode);
-
+        
+        this._admin = new Admin(this.setMode, this.getMode, this._positioning, this.angles);
+        
         this.videoArchive = new VideoArchive(this._streamingSocket);
 
         this._app.use('/myStream', this.streamingSocket.request);
