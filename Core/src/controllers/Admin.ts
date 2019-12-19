@@ -1,4 +1,6 @@
 import * as express from 'express';
+import IAngles from 'src/interfaces/IAngles';
+import IPositioning from 'src/interfaces/IPositioning';
 
 
 export default class Admin {
@@ -8,7 +10,7 @@ export default class Admin {
     private getMode: () => boolean;
 
 
-    constructor(setMode: (boolean) => void, getMode: () => boolean){
+    constructor(setMode: (boolean) => void, getMode: () => boolean, positioning: IPositioning, angles: IAngles){
         this._router = express.Router();
         this.setMode = setMode;
         this.getMode = getMode;
@@ -19,6 +21,8 @@ export default class Admin {
         this._router.patch('/mode', (req: express.Request, res: express.Response) => {
             let mode = req.body.mode;
             this.setMode(mode);
+            if (mode)
+
             res.sendStatus(200);
         });
         this._router.get('/mode', (req: express.Request, res: express.Response) => {
