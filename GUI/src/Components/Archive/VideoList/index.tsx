@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
 import { ListVideos } from '../../../services/Archive';
+import './VideoList.css';
 
 type VideoArchiveState = {
     videos: string[]
 }
+type VideoArchiveProps = {
+    playVideo: (string) => void;
+}
 
-export default class VideoList extends Component<{}, VideoArchiveState> {
+export default class VideoList extends Component<VideoArchiveProps, VideoArchiveState> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -16,13 +20,12 @@ export default class VideoList extends Component<{}, VideoArchiveState> {
 
     }
     render() {
-        console.log(this.state.videos)
         return (
-            <div>
+            <div className="VideoArchive">
                 {
                     this.state.videos.map((video: string, index: number) => {
                         return (
-                            <i key={"video " + index}> {video}</i>
+                            <i className="videoName" key={"video " + index} onClick={() => this.props.playVideo(video)}> {video}</i>
                             
                         )
                     })
