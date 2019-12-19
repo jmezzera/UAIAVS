@@ -27,8 +27,8 @@ class StreamingSocket extends websocket.Server {
                 this.savingStream.write(data);
         };
         this.stopRecording = () => {
-            this.savingStream.end();
-            this.savingStream = null;
+            // this.savingStream.end()
+            // this.savingStream = null;
         };
         this.request = (req, res) => {
             console.log("Getting stream");
