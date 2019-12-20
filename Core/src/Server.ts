@@ -78,9 +78,9 @@ export default class Server implements IServer {
 
             socket.on('recording', (data: { recording: boolean }) => {
                 if (data.recording)
-                    this._streamingSocket.startRecording();
+                    this.videoArchive.startRecording();
                 else
-                    this._streamingSocket.stopRecording();
+                    this.videoArchive.stopRecording();
             });
 
             socket.on("disconnect", () => {

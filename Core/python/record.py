@@ -3,17 +3,17 @@ import cv2
 import threading
 import datetime
 
-
 SOURCE = 'udp://192.168.1.109:10001'
-OUTPUT_NAME = 'output_video.mp4'
-
 def record_video(record):
-    fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v') # for .mp4
+    fourcc = cv2.VideoWriter_fourcc('a','v','c','1') # for .mp4
     cap = cv2.VideoCapture(SOURCE)
-    OUTPUT_NAME = '../static/videos/' + str(datetime.datetime.now()) + '.mp4'
+    
     while True:
         if record.record:
-            writer = cv2.VideoWriter(, fourcc, int(cap.get(5)), (640,360))
+            OUTPUT_NAME = '/home/juan/UAIAVS/Core/static/videos/' + str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')) + '.mp4'
+            OUTPUT_NAME = '/home/juan/UAIAVS/Core/static/videos/final.mp4'
+            print(OUTPUT_NAME)
+            writer = cv2.VideoWriter(OUTPUT_NAME, fourcc, int(cap.get(5)), (640,360))
             print("recordingThread......")
             while True:
                 if not record.record:

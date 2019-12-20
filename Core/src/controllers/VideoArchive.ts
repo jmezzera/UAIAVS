@@ -68,8 +68,7 @@ export default class VideoArchive implements IVideoArchive {
                         res.status(500).send(err)
                 })
         });
-    
-        this._recordingProcess = childProcess.spawn('python3', ['record.py']);
+        this._recordingProcess = childProcess.spawn('python3', [__dirname + '/../../python/record.py']);
 
         this._socket = socket;
     }

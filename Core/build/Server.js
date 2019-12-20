@@ -24,10 +24,10 @@ class Server {
         this._app.use(cors);
         this.streamingSocket = new StreamingSocket_1.default(8082);
         this.angles = new Angles_1.default();
-        this._admin = new Admin_1.default(this.setMode, this.getMode);
         this.positioning = new Positioning_1.default((position) => {
             this.io.emit('position', position);
         }, this.getMode);
+        this._admin = new Admin_1.default(this.setMode, this.getMode, this._positioning, this.angles);
         this.videoArchive = new VideoArchive_1.default(this._streamingSocket);
         this._app.use('/myStream', this.streamingSocket.request);
         this._app.use('/position', this.positioning.router);
@@ -55,9 +55,9 @@ class Server {
             });
             socket.on('recording', (data) => {
                 if (data.recording)
-                    this._streamingSocket.startRecording();
+                    this.videoArchive.startRecording();
                 else
-                    this._streamingSocket.stopRecording();
+                    this.videoArchive.stopRecording();
             });
             socket.on("disconnect", () => {
                 console.log("Client disconnected");

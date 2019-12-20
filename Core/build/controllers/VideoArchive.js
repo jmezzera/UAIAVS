@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
 const express_1 = require("express");
+const childProcess = require("child_process");
 class VideoArchive {
     constructor(socket) {
         this._router = express_1.Router();
@@ -14,37 +15,38 @@ class VideoArchive {
             const video = req.params.video;
             console.log("getting video", video);
             const path = __dirname + '/../../static/videos/' + video;
-            //     const stat = fs.statSync(path)
-            //     const fileSize = stat.size
-            //     const range = req.headers.range
-            //     if (range) {
-            //         const parts = range.replace(/bytes=/, "").split("-")
-            //         const start = parseInt(parts[0], 10)
-            //         const end = parts[1]
-            //             ? parseInt(parts[1], 10)
-            //             : fileSize - 1
-            //         const chunksize = (end - start) + 1
-            //         const file = fs.createReadStream(path, { start, end })
-            //         const head = {
-            //             'Content-Range': `bytes ${start}-${end}/${fileSize}`,
-            //             'Accept-Ranges': 'bytes',
-            //             'Content-Length': chunksize,
-            //             'Content-Type': 'video/mp4',
-            //         }
-            //         res.writeHead(206, head)
-            //         file.pipe(res)
-            //     } else {
-            //         const head = {
-            //             'Content-Length': fileSize,
-            //             'Content-Type': 'video/mp4',
-            //         }
-            //         res.writeHead(200, head)
-            //         fs.createReadStream(path, {highWaterMark: 10}).pipe(res)
-            //     }
-            // })
-            this.playVideo(video);
-            res.sendStatus(200);
+            const stat = fs.statSync(path);
+            const fileSize = stat.size;
+            const range = req.headers.range;
+            if (range) {
+                const parts = range.replace(/bytes=/, "").split("-");
+                const start = parseInt(parts[0], 10);
+                const end = parts[1]
+                    ? parseInt(parts[1], 10)
+                    : fileSize - 1;
+                const chunksize = (end - start) + 1;
+                const file = fs.createReadStream(path, { start, end });
+                const head = {
+                    'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+                    'Accept-Ranges': 'bytes',
+                    'Content-Length': chunksize,
+                    'Content-Type': 'video/mp4',
+                };
+                res.writeHead(206, head);
+                file.pipe(res);
+            }
+            else {
+                const head = {
+                    'Content-Length': fileSize,
+                    'Content-Type': 'video/mp4',
+                };
+                res.writeHead(200, head);
+                fs.createReadStream(path, { highWaterMark: 10 }).pipe(res);
+            }
         });
+        // this.playVideo(video);
+        // res.sendStatus(200);
+        // })
         this._router.delete('/:video', (req, res) => {
             const video = req.params.video;
             this.deleteVideo(video)
@@ -55,6 +57,12 @@ class VideoArchive {
                 else
                     res.status(500).send(err);
             });
+        });
+        console.log(__dirname);
+        this._recordingProcess = childProcess.spawn('python3', [__dirname + '/../../python/record.py']);
+        console.log("asdasdadasdasdasdasl");
+        this._recordingProcess.stdout.on('data', (data) => {
+            console.log(data);
         });
         this._socket = socket;
     }
@@ -108,6 +116,12 @@ class VideoArchive {
     }
     get router() {
         return this._router;
+    }
+    startRecording() {
+        this._recordingProcess.stdin.write('start\n', 'utf-8');
+    }
+    stopRecording() {
+        this._recordingProcess.stdin.write('stop\n', 'utf-8');
     }
 }
 exports.default = VideoArchive;
