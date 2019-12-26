@@ -29,7 +29,7 @@ export default class Positioning extends Component<PositioningProps, {}>{
 
     moveZ(value: number){
         value = 100 - value;
-        this.movement.moveToPoint(-10, -10,  value, 500);
+        this.movement.moveToPoint(-10, -10,  value, 0.5);
     }
 
     render() {

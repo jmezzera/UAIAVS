@@ -122,7 +122,7 @@ class VideoArchive {
         //this._recordingProcess.stdin.write('start\n', 'utf-8');
     }
     stopRecording() {
-        this._recordingProcess.kill(2);
+        this._recordingProcess.kill();
     }
 }
 exports.default = VideoArchive;

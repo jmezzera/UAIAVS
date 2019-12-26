@@ -144,7 +144,7 @@ export default class VideoArchive implements IVideoArchive {
     }
 
     public stopRecording() {
-        this._recordingProcess.kill('2');
+        this._recordingProcess.kill();
     }
 
 }

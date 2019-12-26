@@ -27,7 +27,7 @@ export default class Admin {
             let mode = req.body.mode;
             this.setMode(mode);
             if (mode){
-                this._positioning.moveToPoint(-10, -10, 40, 2);
+                this._positioning.moveToPoint(-10, -10, 60, 2);
                 this._angles.moveToTheta(0);
                 this._angles.moveToPhi(60);
             }
