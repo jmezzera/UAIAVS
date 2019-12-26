@@ -137,14 +137,14 @@ export default class VideoArchive implements IVideoArchive {
         let d = new Date();
         let fileName = `Recording${d.getHours()}${d.getSeconds()}.mp4`
         console.log(fileName)
-        this._recordingProcess = childProcess.spawn('ffmpeg', ["-i", "udp://192.168.1.108:10001", "/home/juan/UAIAVS/Core/static/videos/" + fileName]);
+        this._recordingProcess = childProcess.spawn('ffmpeg', ["-i", "udp://192.168.1.108:10001", "/Users/adolfoscalabrini/Desktop/UM/TESIS/UAIAVS/Core/static/videos/" + fileName]);
         //this._recordingProcess.stdout.on('data', data => console.log(data.toString()))
         //this._recordingProcess.stderr.on('data', data => console.log(data.toString()))
         //this._recordingProcess.stdin.write('start\n', 'utf-8');
     }
 
     public stopRecording() {
-        this._recordingProcess.kill(2);
+        this._recordingProcess.kill('2');
     }
 
 }
