@@ -5,12 +5,12 @@ import datetime
 
 SOURCE = 'udp://192.168.1.109:10001'
 def record_video(record):
-    fourcc = cv2.VideoWriter_fourcc('a','v','c','1') # for .mp4
+    fourcc = cv2.VideoWriter_fourcc('X', '2', '6', '4') # for .mp4
     cap = cv2.VideoCapture(SOURCE)
     
     while True:
         if record.record:
-            OUTPUT_NAME = '/home/juan/UAIAVS/Core/static/videos/' + str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')) + '.mp4'
+            #OUTPUT_NAME = '/home/juan/UAIAVS/Core/static/videos/' + str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')) + '.mp4'
             OUTPUT_NAME = '/home/juan/UAIAVS/Core/static/videos/final.mp4'
             print(OUTPUT_NAME)
             writer = cv2.VideoWriter(OUTPUT_NAME, fourcc, int(cap.get(5)), (640,360))

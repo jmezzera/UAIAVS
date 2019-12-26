@@ -29,7 +29,7 @@ export default class Admin {
             if (mode){
                 this._positioning.moveToPoint(-10, -10, 40, 2);
                 this._angles.moveToTheta(0);
-                this._angles.moveToPhi(0);
+                this._angles.moveToPhi(60);
             }
 
             res.sendStatus(200);

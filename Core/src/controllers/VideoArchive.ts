@@ -68,7 +68,7 @@ export default class VideoArchive implements IVideoArchive {
                         res.status(500).send(err)
                 })
         });
-        this._recordingProcess = childProcess.spawn('python3', [__dirname + '/../../python/record.py']);
+        //this._recordingProcess = childProcess.spawn('ffmpeg', ["-i", "udp://192.168.1.108:10001", "/home/juan/UAIAVS/core/static/videos/PRUEBAAAA"]);
 
         this._socket = socket;
     }
@@ -134,11 +134,17 @@ export default class VideoArchive implements IVideoArchive {
     }
     
     public startRecording() {
-        this._recordingProcess.stdin.write('start\n', 'utf-8');
+        let d = new Date();
+        let fileName = `Recording${d.getHours()}${d.getSeconds()}.mp4`
+        console.log(fileName)
+        this._recordingProcess = childProcess.spawn('ffmpeg', ["-i", "udp://192.168.1.108:10001", "/home/juan/UAIAVS/Core/static/videos/" + fileName]);
+        //this._recordingProcess.stdout.on('data', data => console.log(data.toString()))
+        //this._recordingProcess.stderr.on('data', data => console.log(data.toString()))
+        //this._recordingProcess.stdin.write('start\n', 'utf-8');
     }
 
     public stopRecording() {
-        this._recordingProcess.stdin.write('stop\n', 'utf-8');
+        this._recordingProcess.kill(2);
     }
 
 }
