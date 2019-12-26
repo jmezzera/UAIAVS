@@ -75,7 +75,7 @@ class App extends Component<{}, AppState> {
     this.movement = new MovementWithSockets(this.socket);
     this.anglesController = new Angles(this.socket);
     this.recordingController = new Recording(this.socket);
-    this.modeController = new Mode(this.anglesController);
+    this.modeController = new Mode();
   }
   positionReceived(position: { x: number, y: number, z: number }) {
     this.setState({ position });
