@@ -1,5 +1,5 @@
 opencv-python==4.1.0
 requests==2.22.0
-tensorflow==1.14.0
+tensorflow==1.15.2
 goprocam==3.0.4
 tqdm==4.33.0
